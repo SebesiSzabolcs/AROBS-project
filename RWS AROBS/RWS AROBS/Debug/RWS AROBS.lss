@@ -3,51 +3,55 @@ RWS AROBS.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000048  00000000  00000000  00000054  2**1
+  0 .text         00000124  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  0000009c  2**0
+  1 .data         00000002  00800060  00000124  000001b8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .comment      00000030  00000000  00000000  0000009c  2**0
+  2 .bss          00000003  00800062  00800062  000001ba  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000001ba  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000000cc  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001ec  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000020  00000000  00000000  00000108  2**0
+  5 .debug_aranges 00000028  00000000  00000000  00000228  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000514  00000000  00000000  00000128  2**0
+  6 .debug_info   00000675  00000000  00000000  00000250  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000004a4  00000000  00000000  0000063c  2**0
+  7 .debug_abbrev 00000591  00000000  00000000  000008c5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000001c0  00000000  00000000  00000ae0  2**0
+  8 .debug_line   0000028c  00000000  00000000  00000e56  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000024  00000000  00000000  00000ca0  2**2
+  9 .debug_frame  00000034  00000000  00000000  000010e4  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000002c0  00000000  00000000  00000cc4  2**0
+ 10 .debug_str    00000383  00000000  00000000  00001118  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_ranges 00000010  00000000  00000000  00000f84  2**0
+ 11 .debug_loc    000000b4  00000000  00000000  0000149b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000018  00000000  00000000  0000154f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
 
 00000000 <__vectors>:
    0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
-   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
-   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
-   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
-   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
-   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
-   c:	14 c0       	rjmp	.+40     	; 0x36 <__bad_interrupt>
-   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
-  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
-  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
-  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
-  16:	0f c0       	rjmp	.+30     	; 0x36 <__bad_interrupt>
-  18:	0e c0       	rjmp	.+28     	; 0x36 <__bad_interrupt>
-  1a:	0d c0       	rjmp	.+26     	; 0x36 <__bad_interrupt>
-  1c:	0c c0       	rjmp	.+24     	; 0x36 <__bad_interrupt>
-  1e:	0b c0       	rjmp	.+22     	; 0x36 <__bad_interrupt>
-  20:	0a c0       	rjmp	.+20     	; 0x36 <__bad_interrupt>
-  22:	09 c0       	rjmp	.+18     	; 0x36 <__bad_interrupt>
-  24:	08 c0       	rjmp	.+16     	; 0x36 <__bad_interrupt>
+   2:	2c c0       	rjmp	.+88     	; 0x5c <__bad_interrupt>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+   8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+  20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
 
 00000026 <__ctors_end>:
   26:	11 24       	eor	r1, r1
@@ -56,36 +60,189 @@ Disassembly of section .text:
   2c:	d4 e0       	ldi	r29, 0x04	; 4
   2e:	de bf       	out	0x3e, r29	; 62
   30:	cd bf       	out	0x3d, r28	; 61
-  32:	02 d0       	rcall	.+4      	; 0x38 <main>
-  34:	07 c0       	rjmp	.+14     	; 0x44 <_exit>
 
-00000036 <__bad_interrupt>:
-  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e4 e2       	ldi	r30, 0x24	; 36
+  3a:	f1 e0       	ldi	r31, 0x01	; 1
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	a2 36       	cpi	r26, 0x62	; 98
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
 
-00000038 <main>:
-	FPort } EN_Port_Type;
+00000048 <__do_clear_bss>:
+  48:	20 e0       	ldi	r18, 0x00	; 0
+  4a:	a2 e6       	ldi	r26, 0x62	; 98
+  4c:	b0 e0       	ldi	r27, 0x00	; 0
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
 
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	a5 36       	cpi	r26, 0x65	; 101
+  54:	b2 07       	cpc	r27, r18
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	43 d0       	rcall	.+134    	; 0xe0 <main>
+  5a:	62 c0       	rjmp	.+196    	; 0x120 <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <ControlPin>:
+}
+
+void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
+{
+	static uint16_t counter = 0;
+	counter++;
+  5e:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <__data_end>
+  62:	30 91 63 00 	lds	r19, 0x0063	; 0x800063 <__data_end+0x1>
+  66:	2f 5f       	subi	r18, 0xFF	; 255
+  68:	3f 4f       	sbci	r19, 0xFF	; 255
+  6a:	30 93 63 00 	sts	0x0063, r19	; 0x800063 <__data_end+0x1>
+  6e:	20 93 62 00 	sts	0x0062, r18	; 0x800062 <__data_end>
+	switch(Port2Control) {
+  72:	81 30       	cpi	r24, 0x01	; 1
+  74:	19 f0       	breq	.+6      	; 0x7c <ControlPin+0x1e>
+  76:	82 30       	cpi	r24, 0x02	; 2
+  78:	d1 f0       	breq	.+52     	; 0xae <ControlPin+0x50>
+  7a:	08 95       	ret
+		case (BPort):
+			if (pinState) {
+  7c:	44 23       	and	r20, r20
+  7e:	59 f0       	breq	.+22     	; 0x96 <ControlPin+0x38>
+				SETPORTB(pinNr);
+  80:	28 b3       	in	r18, 0x18	; 24
+  82:	81 e0       	ldi	r24, 0x01	; 1
+  84:	90 e0       	ldi	r25, 0x00	; 0
+  86:	02 c0       	rjmp	.+4      	; 0x8c <ControlPin+0x2e>
+  88:	88 0f       	add	r24, r24
+  8a:	99 1f       	adc	r25, r25
+  8c:	6a 95       	dec	r22
+  8e:	e2 f7       	brpl	.-8      	; 0x88 <ControlPin+0x2a>
+  90:	82 2b       	or	r24, r18
+  92:	88 bb       	out	0x18, r24	; 24
+  94:	08 95       	ret
+			} else {
+				CLEARPORTB(pinNr);
+  96:	28 b3       	in	r18, 0x18	; 24
+  98:	81 e0       	ldi	r24, 0x01	; 1
+  9a:	90 e0       	ldi	r25, 0x00	; 0
+  9c:	02 c0       	rjmp	.+4      	; 0xa2 <ControlPin+0x44>
+  9e:	88 0f       	add	r24, r24
+  a0:	99 1f       	adc	r25, r25
+  a2:	6a 95       	dec	r22
+  a4:	e2 f7       	brpl	.-8      	; 0x9e <ControlPin+0x40>
+  a6:	80 95       	com	r24
+  a8:	82 23       	and	r24, r18
+  aa:	88 bb       	out	0x18, r24	; 24
+  ac:	08 95       	ret
+			}
+		break;
+		case(CPort):
+			if(pinState){
+  ae:	44 23       	and	r20, r20
+  b0:	59 f0       	breq	.+22     	; 0xc8 <ControlPin+0x6a>
+				SETPORTC(pinNr);
+  b2:	25 b3       	in	r18, 0x15	; 21
+  b4:	81 e0       	ldi	r24, 0x01	; 1
+  b6:	90 e0       	ldi	r25, 0x00	; 0
+  b8:	02 c0       	rjmp	.+4      	; 0xbe <ControlPin+0x60>
+  ba:	88 0f       	add	r24, r24
+  bc:	99 1f       	adc	r25, r25
+  be:	6a 95       	dec	r22
+  c0:	e2 f7       	brpl	.-8      	; 0xba <ControlPin+0x5c>
+  c2:	82 2b       	or	r24, r18
+  c4:	85 bb       	out	0x15, r24	; 21
+  c6:	08 95       	ret
+			} else {
+				CLEARPORTC(pinNr);	
+  c8:	25 b3       	in	r18, 0x15	; 21
+  ca:	81 e0       	ldi	r24, 0x01	; 1
+  cc:	90 e0       	ldi	r25, 0x00	; 0
+  ce:	02 c0       	rjmp	.+4      	; 0xd4 <ControlPin+0x76>
+  d0:	88 0f       	add	r24, r24
+  d2:	99 1f       	adc	r25, r25
+  d4:	6a 95       	dec	r22
+  d6:	e2 f7       	brpl	.-8      	; 0xd0 <ControlPin+0x72>
+  d8:	80 95       	com	r24
+  da:	82 23       	and	r24, r18
+  dc:	85 bb       	out	0x15, r24	; 21
+  de:	08 95       	ret
+
+000000e0 <main>:
 
 int main(void)
 {
-	DDRB = 0x06;
-  38:	86 e0       	ldi	r24, 0x06	; 6
-  3a:	87 bb       	out	0x17, r24	; 23
-	SETPORTB(1);
-  3c:	c1 9a       	sbi	0x18, 1	; 24
-	SETPORTB(2);
-  3e:	c2 9a       	sbi	0x18, 2	; 24
-	
-    /* Replace with your application code */
-    while (1) 
-	
-    {
-		CLEARPORTB(1);
-  40:	c1 98       	cbi	0x18, 1	; 24
-  42:	fe cf       	rjmp	.-4      	; 0x40 <__SREG__+0x1>
+	static bool pinstate = true;
+//	DDRB = 0x02;
+	DDRC = 0x3F;
+  e0:	8f e3       	ldi	r24, 0x3F	; 63
+  e2:	84 bb       	out	0x14, r24	; 20
+	for (i=0; i<=5; i++)
+	{
+		ControlPin(CPort,i,pinstate);
+		_delay_ms(1000);
+	}
+		pinstate^=1;
+  e4:	c1 e0       	ldi	r28, 0x01	; 1
+		ControlPin(BPort,1,pinstate);
+		ControlPin(CPort,4,pinstate);
+		_delay_ms(1000);
+		pinstate^=1;*/
+	static unsigned char i; 
+	for (i=0; i<=5; i++)
+  e6:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <i.1743>
+  ea:	60 e0       	ldi	r22, 0x00	; 0
+	{
+		ControlPin(CPort,i,pinstate);
+  ec:	40 91 60 00 	lds	r20, 0x0060	; 0x800060 <__data_start>
+  f0:	82 e0       	ldi	r24, 0x02	; 2
+  f2:	b5 df       	rcall	.-150    	; 0x5e <ControlPin>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
 
-00000044 <_exit>:
-  44:	f8 94       	cli
+	__builtin_avr_delay_cycles(__ticks_dc);
+  f4:	2f e3       	ldi	r18, 0x3F	; 63
+  f6:	8d e0       	ldi	r24, 0x0D	; 13
+  f8:	93 e0       	ldi	r25, 0x03	; 3
+  fa:	21 50       	subi	r18, 0x01	; 1
+  fc:	80 40       	sbci	r24, 0x00	; 0
+  fe:	90 40       	sbci	r25, 0x00	; 0
+ 100:	e1 f7       	brne	.-8      	; 0xfa <main+0x1a>
+ 102:	00 c0       	rjmp	.+0      	; 0x104 <main+0x24>
+ 104:	00 00       	nop
+		ControlPin(BPort,1,pinstate);
+		ControlPin(CPort,4,pinstate);
+		_delay_ms(1000);
+		pinstate^=1;*/
+	static unsigned char i; 
+	for (i=0; i<=5; i++)
+ 106:	60 91 64 00 	lds	r22, 0x0064	; 0x800064 <i.1743>
+ 10a:	6f 5f       	subi	r22, 0xFF	; 255
+ 10c:	60 93 64 00 	sts	0x0064, r22	; 0x800064 <i.1743>
+ 110:	66 30       	cpi	r22, 0x06	; 6
+ 112:	60 f3       	brcs	.-40     	; 0xec <main+0xc>
+	{
+		ControlPin(CPort,i,pinstate);
+		_delay_ms(1000);
+	}
+		pinstate^=1;
+ 114:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__data_start>
+ 118:	8c 27       	eor	r24, r28
+ 11a:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__data_start>
+    }	  
+ 11e:	e3 cf       	rjmp	.-58     	; 0xe6 <main+0x6>
 
-00000046 <__stop_program>:
-  46:	ff cf       	rjmp	.-2      	; 0x46 <__stop_program>
+00000120 <_exit>:
+ 120:	f8 94       	cli
+
+00000122 <__stop_program>:
+ 122:	ff cf       	rjmp	.-2      	; 0x122 <__stop_program>
