@@ -3,31 +3,31 @@ RWS AROBS.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000124  00000000  00000000  00000094  2**1
+  0 .text         000001d4  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000002  00800060  00000124  000001b8  2**0
+  1 .data         00000002  00800060  000001d4  00000268  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000003  00800062  00800062  000001ba  2**0
+  2 .bss          00000006  00800062  00800062  0000026a  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000001ba  2**0
+  3 .comment      00000030  00000000  00000000  0000026a  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001ec  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000029c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000028  00000000  00000000  00000228  2**0
+  5 .debug_aranges 00000050  00000000  00000000  000002d8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000675  00000000  00000000  00000250  2**0
+  6 .debug_info   000006de  00000000  00000000  00000328  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000591  00000000  00000000  000008c5  2**0
+  7 .debug_abbrev 000005df  00000000  00000000  00000a06  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000028c  00000000  00000000  00000e56  2**0
+  8 .debug_line   000002f6  00000000  00000000  00000fe5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000034  00000000  00000000  000010e4  2**2
+  9 .debug_frame  00000088  00000000  00000000  000012dc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000383  00000000  00000000  00001118  2**0
+ 10 .debug_str    0000037a  00000000  00000000  00001364  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000b4  00000000  00000000  0000149b  2**0
+ 11 .debug_loc    000000cf  00000000  00000000  000016de  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000018  00000000  00000000  0000154f  2**0
+ 12 .debug_ranges 00000030  00000000  00000000  000017ad  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -42,7 +42,7 @@ Disassembly of section .text:
    c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
    e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
   10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
-  12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+  12:	95 c0       	rjmp	.+298    	; 0x13e <__vector_9>
   14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
   16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
   18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
@@ -65,7 +65,7 @@ Disassembly of section .text:
   32:	10 e0       	ldi	r17, 0x00	; 0
   34:	a0 e6       	ldi	r26, 0x60	; 96
   36:	b0 e0       	ldi	r27, 0x00	; 0
-  38:	e4 e2       	ldi	r30, 0x24	; 36
+  38:	e4 ed       	ldi	r30, 0xD4	; 212
   3a:	f1 e0       	ldi	r31, 0x01	; 1
   3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
   3e:	05 90       	lpm	r0, Z+
@@ -84,18 +84,18 @@ Disassembly of section .text:
   50:	1d 92       	st	X+, r1
 
 00000052 <.do_clear_bss_start>:
-  52:	a5 36       	cpi	r26, 0x65	; 101
+  52:	a8 36       	cpi	r26, 0x68	; 104
   54:	b2 07       	cpc	r27, r18
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
   58:	43 d0       	rcall	.+134    	; 0xe0 <main>
-  5a:	62 c0       	rjmp	.+196    	; 0x120 <_exit>
+  5a:	ba c0       	rjmp	.+372    	; 0x1d0 <_exit>
 
 0000005c <__bad_interrupt>:
   5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
 
 0000005e <ControlPin>:
 }
-
+}
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 {
 	static uint16_t counter = 0;
@@ -180,69 +180,154 @@ void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 int main(void)
 {
 	static bool pinstate = true;
+	unsigned char i; 
+	cli();
+  e0:	f8 94       	cli
+	Timer0Init();
+  e2:	25 d0       	rcall	.+74     	; 0x12e <Timer0Init>
+	
+	sei();
+  e4:	78 94       	sei
 //	DDRB = 0x02;
 	DDRC = 0x3F;
-  e0:	8f e3       	ldi	r24, 0x3F	; 63
-  e2:	84 bb       	out	0x14, r24	; 20
-	for (i=0; i<=5; i++)
-	{
-		ControlPin(CPort,i,pinstate);
-		_delay_ms(1000);
-	}
-		pinstate^=1;
-  e4:	c1 e0       	ldi	r28, 0x01	; 1
-		ControlPin(BPort,1,pinstate);
-		ControlPin(CPort,4,pinstate);
-		_delay_ms(1000);
-		pinstate^=1;*/
-	static unsigned char i; 
-	for (i=0; i<=5; i++)
-  e6:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <i.1743>
-  ea:	60 e0       	ldi	r22, 0x00	; 0
-	{
-		ControlPin(CPort,i,pinstate);
-  ec:	40 91 60 00 	lds	r20, 0x0060	; 0x800060 <__data_start>
-  f0:	82 e0       	ldi	r24, 0x02	; 2
-  f2:	b5 df       	rcall	.-150    	; 0x5e <ControlPin>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+  e6:	8f e3       	ldi	r24, 0x3F	; 63
+  e8:	84 bb       	out	0x14, r24	; 20
+	
+    /* Replace with your application code */
+    while (1) 
+		  
+    {	
+		if ((GlobalMillTimer % 1000) == 0) 
+  ea:	0f 2e       	mov	r0, r31
+  ec:	f8 ee       	ldi	r31, 0xE8	; 232
+  ee:	cf 2e       	mov	r12, r31
+  f0:	f3 e0       	ldi	r31, 0x03	; 3
+  f2:	df 2e       	mov	r13, r31
+  f4:	e1 2c       	mov	r14, r1
+  f6:	f1 2c       	mov	r15, r1
+  f8:	f0 2d       	mov	r31, r0
+  fa:	60 91 64 00 	lds	r22, 0x0064	; 0x800064 <GlobalMillTimer>
+  fe:	70 91 65 00 	lds	r23, 0x0065	; 0x800065 <GlobalMillTimer+0x1>
+ 102:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <GlobalMillTimer+0x2>
+ 106:	90 91 67 00 	lds	r25, 0x0067	; 0x800067 <GlobalMillTimer+0x3>
+ 10a:	a7 01       	movw	r20, r14
+ 10c:	96 01       	movw	r18, r12
+ 10e:	3e d0       	rcall	.+124    	; 0x18c <__udivmodsi4>
+ 110:	67 2b       	or	r22, r23
+ 112:	68 2b       	or	r22, r24
+ 114:	69 2b       	or	r22, r25
+ 116:	89 f7       	brne	.-30     	; 0xfa <main+0x1a>
+		{
+			ControlPin(CPort,1,pinstate);
+ 118:	c0 91 60 00 	lds	r28, 0x0060	; 0x800060 <__data_start>
+ 11c:	4c 2f       	mov	r20, r28
+ 11e:	61 e0       	ldi	r22, 0x01	; 1
+ 120:	82 e0       	ldi	r24, 0x02	; 2
+ 122:	9d df       	rcall	.-198    	; 0x5e <ControlPin>
+			pinstate^=1;
+ 124:	41 e0       	ldi	r20, 0x01	; 1
+ 126:	4c 27       	eor	r20, r28
+ 128:	40 93 60 00 	sts	0x0060, r20	; 0x800060 <__data_start>
+ 12c:	e6 cf       	rjmp	.-52     	; 0xfa <main+0x1a>
 
-	__builtin_avr_delay_cycles(__ticks_dc);
-  f4:	2f e3       	ldi	r18, 0x3F	; 63
-  f6:	8d e0       	ldi	r24, 0x0D	; 13
-  f8:	93 e0       	ldi	r25, 0x03	; 3
-  fa:	21 50       	subi	r18, 0x01	; 1
-  fc:	80 40       	sbci	r24, 0x00	; 0
-  fe:	90 40       	sbci	r25, 0x00	; 0
- 100:	e1 f7       	brne	.-8      	; 0xfa <main+0x1a>
- 102:	00 c0       	rjmp	.+0      	; 0x104 <main+0x24>
- 104:	00 00       	nop
-		ControlPin(BPort,1,pinstate);
-		ControlPin(CPort,4,pinstate);
-		_delay_ms(1000);
-		pinstate^=1;*/
-	static unsigned char i; 
-	for (i=0; i<=5; i++)
- 106:	60 91 64 00 	lds	r22, 0x0064	; 0x800064 <i.1743>
- 10a:	6f 5f       	subi	r22, 0xFF	; 255
- 10c:	60 93 64 00 	sts	0x0064, r22	; 0x800064 <i.1743>
- 110:	66 30       	cpi	r22, 0x06	; 6
- 112:	60 f3       	brcs	.-40     	; 0xec <main+0xc>
-	{
-		ControlPin(CPort,i,pinstate);
-		_delay_ms(1000);
-	}
-		pinstate^=1;
- 114:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__data_start>
- 118:	8c 27       	eor	r24, r28
- 11a:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__data_start>
-    }	  
- 11e:	e3 cf       	rjmp	.-58     	; 0xe6 <main+0x6>
+0000012e <Timer0Init>:
+#include <avr/interrupt.h>
+#include <avr/io.h>
+volatile uint32_t GlobalMillTimer = 0;
+void Timer0Init (void)
+{
+	TCCR0 = (1<<CS01)|(1<<CS00);
+ 12e:	83 e0       	ldi	r24, 0x03	; 3
+ 130:	83 bf       	out	0x33, r24	; 51
+	TCNT0 = (16);
+ 132:	80 e1       	ldi	r24, 0x10	; 16
+ 134:	82 bf       	out	0x32, r24	; 50
+	TIMSK |= (1<<TOIE0);	
+ 136:	89 b7       	in	r24, 0x39	; 57
+ 138:	81 60       	ori	r24, 0x01	; 1
+ 13a:	89 bf       	out	0x39, r24	; 57
+ 13c:	08 95       	ret
 
-00000120 <_exit>:
- 120:	f8 94       	cli
+0000013e <__vector_9>:
+}
+ISR(TIMER0_OVF_vect)
+{
+ 13e:	1f 92       	push	r1
+ 140:	0f 92       	push	r0
+ 142:	0f b6       	in	r0, 0x3f	; 63
+ 144:	0f 92       	push	r0
+ 146:	11 24       	eor	r1, r1
+ 148:	8f 93       	push	r24
+ 14a:	9f 93       	push	r25
+ 14c:	af 93       	push	r26
+ 14e:	bf 93       	push	r27
+	GlobalMillTimer ++;
+ 150:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <GlobalMillTimer>
+ 154:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <GlobalMillTimer+0x1>
+ 158:	a0 91 66 00 	lds	r26, 0x0066	; 0x800066 <GlobalMillTimer+0x2>
+ 15c:	b0 91 67 00 	lds	r27, 0x0067	; 0x800067 <GlobalMillTimer+0x3>
+ 160:	01 96       	adiw	r24, 0x01	; 1
+ 162:	a1 1d       	adc	r26, r1
+ 164:	b1 1d       	adc	r27, r1
+ 166:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <GlobalMillTimer>
+ 16a:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <GlobalMillTimer+0x1>
+ 16e:	a0 93 66 00 	sts	0x0066, r26	; 0x800066 <GlobalMillTimer+0x2>
+ 172:	b0 93 67 00 	sts	0x0067, r27	; 0x800067 <GlobalMillTimer+0x3>
+	TCNT0 = (16);
+ 176:	80 e1       	ldi	r24, 0x10	; 16
+ 178:	82 bf       	out	0x32, r24	; 50
+ 17a:	bf 91       	pop	r27
+ 17c:	af 91       	pop	r26
+ 17e:	9f 91       	pop	r25
+ 180:	8f 91       	pop	r24
+ 182:	0f 90       	pop	r0
+ 184:	0f be       	out	0x3f, r0	; 63
+ 186:	0f 90       	pop	r0
+ 188:	1f 90       	pop	r1
+ 18a:	18 95       	reti
 
-00000122 <__stop_program>:
- 122:	ff cf       	rjmp	.-2      	; 0x122 <__stop_program>
+0000018c <__udivmodsi4>:
+ 18c:	a1 e2       	ldi	r26, 0x21	; 33
+ 18e:	1a 2e       	mov	r1, r26
+ 190:	aa 1b       	sub	r26, r26
+ 192:	bb 1b       	sub	r27, r27
+ 194:	fd 01       	movw	r30, r26
+ 196:	0d c0       	rjmp	.+26     	; 0x1b2 <__udivmodsi4_ep>
+
+00000198 <__udivmodsi4_loop>:
+ 198:	aa 1f       	adc	r26, r26
+ 19a:	bb 1f       	adc	r27, r27
+ 19c:	ee 1f       	adc	r30, r30
+ 19e:	ff 1f       	adc	r31, r31
+ 1a0:	a2 17       	cp	r26, r18
+ 1a2:	b3 07       	cpc	r27, r19
+ 1a4:	e4 07       	cpc	r30, r20
+ 1a6:	f5 07       	cpc	r31, r21
+ 1a8:	20 f0       	brcs	.+8      	; 0x1b2 <__udivmodsi4_ep>
+ 1aa:	a2 1b       	sub	r26, r18
+ 1ac:	b3 0b       	sbc	r27, r19
+ 1ae:	e4 0b       	sbc	r30, r20
+ 1b0:	f5 0b       	sbc	r31, r21
+
+000001b2 <__udivmodsi4_ep>:
+ 1b2:	66 1f       	adc	r22, r22
+ 1b4:	77 1f       	adc	r23, r23
+ 1b6:	88 1f       	adc	r24, r24
+ 1b8:	99 1f       	adc	r25, r25
+ 1ba:	1a 94       	dec	r1
+ 1bc:	69 f7       	brne	.-38     	; 0x198 <__udivmodsi4_loop>
+ 1be:	60 95       	com	r22
+ 1c0:	70 95       	com	r23
+ 1c2:	80 95       	com	r24
+ 1c4:	90 95       	com	r25
+ 1c6:	9b 01       	movw	r18, r22
+ 1c8:	ac 01       	movw	r20, r24
+ 1ca:	bd 01       	movw	r22, r26
+ 1cc:	cf 01       	movw	r24, r30
+ 1ce:	08 95       	ret
+
+000001d0 <_exit>:
+ 1d0:	f8 94       	cli
+
+000001d2 <__stop_program>:
+ 1d2:	ff cf       	rjmp	.-2      	; 0x1d2 <__stop_program>
