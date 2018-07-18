@@ -3,31 +3,31 @@ RWS AROBS.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000001d4  00000000  00000000  00000094  2**1
+  0 .text         000001e0  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000002  00800060  000001d4  00000268  2**0
+  1 .data         00000002  00800060  000001e0  00000274  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000006  00800062  00800062  0000026a  2**0
+  2 .bss          00000006  00800062  00800062  00000276  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000026a  2**0
+  3 .comment      00000030  00000000  00000000  00000276  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000029c  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002a8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000050  00000000  00000000  000002d8  2**0
+  5 .debug_aranges 00000050  00000000  00000000  000002e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000006de  00000000  00000000  00000328  2**0
+  6 .debug_info   000006de  00000000  00000000  00000334  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000005df  00000000  00000000  00000a06  2**0
+  7 .debug_abbrev 000005df  00000000  00000000  00000a12  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000002f6  00000000  00000000  00000fe5  2**0
+  8 .debug_line   00000301  00000000  00000000  00000ff1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000088  00000000  00000000  000012dc  2**2
+  9 .debug_frame  00000088  00000000  00000000  000012f4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000037a  00000000  00000000  00001364  2**0
+ 10 .debug_str    0000037a  00000000  00000000  0000137c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000cf  00000000  00000000  000016de  2**0
+ 11 .debug_loc    000000cf  00000000  00000000  000016f6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000030  00000000  00000000  000017ad  2**0
+ 12 .debug_ranges 00000030  00000000  00000000  000017c5  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -42,7 +42,7 @@ Disassembly of section .text:
    c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
    e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
   10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
-  12:	95 c0       	rjmp	.+298    	; 0x13e <__vector_9>
+  12:	97 c0       	rjmp	.+302    	; 0x142 <__vector_9>
   14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
   16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
   18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
@@ -65,7 +65,7 @@ Disassembly of section .text:
   32:	10 e0       	ldi	r17, 0x00	; 0
   34:	a0 e6       	ldi	r26, 0x60	; 96
   36:	b0 e0       	ldi	r27, 0x00	; 0
-  38:	e4 ed       	ldi	r30, 0xD4	; 212
+  38:	e0 ee       	ldi	r30, 0xE0	; 224
   3a:	f1 e0       	ldi	r31, 0x01	; 1
   3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
   3e:	05 90       	lpm	r0, Z+
@@ -88,7 +88,7 @@ Disassembly of section .text:
   54:	b2 07       	cpc	r27, r18
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
   58:	43 d0       	rcall	.+134    	; 0xe0 <main>
-  5a:	ba c0       	rjmp	.+372    	; 0x1d0 <_exit>
+  5a:	c0 c0       	rjmp	.+384    	; 0x1dc <_exit>
 
 0000005c <__bad_interrupt>:
   5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
@@ -188,7 +188,7 @@ int main(void)
 	
 	sei();
   e4:	78 94       	sei
-//	DDRB = 0x02;
+
 	DDRC = 0x3F;
   e6:	8f e3       	ldi	r24, 0x3F	; 63
   e8:	84 bb       	out	0x14, r24	; 20
@@ -212,7 +212,7 @@ int main(void)
  106:	90 91 67 00 	lds	r25, 0x0067	; 0x800067 <GlobalMillTimer+0x3>
  10a:	a7 01       	movw	r20, r14
  10c:	96 01       	movw	r18, r12
- 10e:	3e d0       	rcall	.+124    	; 0x18c <__udivmodsi4>
+ 10e:	44 d0       	rcall	.+136    	; 0x198 <__udivmodsi4>
  110:	67 2b       	or	r22, r23
  112:	68 2b       	or	r22, r24
  114:	69 2b       	or	r22, r25
@@ -239,95 +239,104 @@ void Timer0Init (void)
 	TCCR0 = (1<<CS01)|(1<<CS00);
  12e:	83 e0       	ldi	r24, 0x03	; 3
  130:	83 bf       	out	0x33, r24	; 51
-	TCNT0 = (16);
- 132:	80 e1       	ldi	r24, 0x10	; 16
+	TCNT0 = (193);
+ 132:	81 ec       	ldi	r24, 0xC1	; 193
  134:	82 bf       	out	0x32, r24	; 50
-	TIMSK |= (1<<TOIE0);	
+	TIMSK |= (1<<TOIE0);
  136:	89 b7       	in	r24, 0x39	; 57
  138:	81 60       	ori	r24, 0x01	; 1
  13a:	89 bf       	out	0x39, r24	; 57
- 13c:	08 95       	ret
+	DDRC = 0X30;	
+ 13c:	80 e3       	ldi	r24, 0x30	; 48
+ 13e:	84 bb       	out	0x14, r24	; 20
+ 140:	08 95       	ret
 
-0000013e <__vector_9>:
+00000142 <__vector_9>:
 }
+	
 ISR(TIMER0_OVF_vect)
 {
- 13e:	1f 92       	push	r1
- 140:	0f 92       	push	r0
- 142:	0f b6       	in	r0, 0x3f	; 63
+ 142:	1f 92       	push	r1
  144:	0f 92       	push	r0
- 146:	11 24       	eor	r1, r1
- 148:	8f 93       	push	r24
- 14a:	9f 93       	push	r25
- 14c:	af 93       	push	r26
- 14e:	bf 93       	push	r27
+ 146:	0f b6       	in	r0, 0x3f	; 63
+ 148:	0f 92       	push	r0
+ 14a:	11 24       	eor	r1, r1
+ 14c:	8f 93       	push	r24
+ 14e:	9f 93       	push	r25
+ 150:	af 93       	push	r26
+ 152:	bf 93       	push	r27
+	PORTC ^= 0X30;
+ 154:	95 b3       	in	r25, 0x15	; 21
+ 156:	80 e3       	ldi	r24, 0x30	; 48
+ 158:	89 27       	eor	r24, r25
+ 15a:	85 bb       	out	0x15, r24	; 21
 	GlobalMillTimer ++;
- 150:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <GlobalMillTimer>
- 154:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <GlobalMillTimer+0x1>
- 158:	a0 91 66 00 	lds	r26, 0x0066	; 0x800066 <GlobalMillTimer+0x2>
- 15c:	b0 91 67 00 	lds	r27, 0x0067	; 0x800067 <GlobalMillTimer+0x3>
- 160:	01 96       	adiw	r24, 0x01	; 1
- 162:	a1 1d       	adc	r26, r1
- 164:	b1 1d       	adc	r27, r1
- 166:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <GlobalMillTimer>
- 16a:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <GlobalMillTimer+0x1>
- 16e:	a0 93 66 00 	sts	0x0066, r26	; 0x800066 <GlobalMillTimer+0x2>
- 172:	b0 93 67 00 	sts	0x0067, r27	; 0x800067 <GlobalMillTimer+0x3>
-	TCNT0 = (16);
- 176:	80 e1       	ldi	r24, 0x10	; 16
- 178:	82 bf       	out	0x32, r24	; 50
- 17a:	bf 91       	pop	r27
- 17c:	af 91       	pop	r26
- 17e:	9f 91       	pop	r25
- 180:	8f 91       	pop	r24
- 182:	0f 90       	pop	r0
- 184:	0f be       	out	0x3f, r0	; 63
- 186:	0f 90       	pop	r0
- 188:	1f 90       	pop	r1
- 18a:	18 95       	reti
+ 15c:	80 91 64 00 	lds	r24, 0x0064	; 0x800064 <GlobalMillTimer>
+ 160:	90 91 65 00 	lds	r25, 0x0065	; 0x800065 <GlobalMillTimer+0x1>
+ 164:	a0 91 66 00 	lds	r26, 0x0066	; 0x800066 <GlobalMillTimer+0x2>
+ 168:	b0 91 67 00 	lds	r27, 0x0067	; 0x800067 <GlobalMillTimer+0x3>
+ 16c:	01 96       	adiw	r24, 0x01	; 1
+ 16e:	a1 1d       	adc	r26, r1
+ 170:	b1 1d       	adc	r27, r1
+ 172:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <GlobalMillTimer>
+ 176:	90 93 65 00 	sts	0x0065, r25	; 0x800065 <GlobalMillTimer+0x1>
+ 17a:	a0 93 66 00 	sts	0x0066, r26	; 0x800066 <GlobalMillTimer+0x2>
+ 17e:	b0 93 67 00 	sts	0x0067, r27	; 0x800067 <GlobalMillTimer+0x3>
+	TCNT0 = (193);
+ 182:	81 ec       	ldi	r24, 0xC1	; 193
+ 184:	82 bf       	out	0x32, r24	; 50
+ 186:	bf 91       	pop	r27
+ 188:	af 91       	pop	r26
+ 18a:	9f 91       	pop	r25
+ 18c:	8f 91       	pop	r24
+ 18e:	0f 90       	pop	r0
+ 190:	0f be       	out	0x3f, r0	; 63
+ 192:	0f 90       	pop	r0
+ 194:	1f 90       	pop	r1
+ 196:	18 95       	reti
 
-0000018c <__udivmodsi4>:
- 18c:	a1 e2       	ldi	r26, 0x21	; 33
- 18e:	1a 2e       	mov	r1, r26
- 190:	aa 1b       	sub	r26, r26
- 192:	bb 1b       	sub	r27, r27
- 194:	fd 01       	movw	r30, r26
- 196:	0d c0       	rjmp	.+26     	; 0x1b2 <__udivmodsi4_ep>
+00000198 <__udivmodsi4>:
+ 198:	a1 e2       	ldi	r26, 0x21	; 33
+ 19a:	1a 2e       	mov	r1, r26
+ 19c:	aa 1b       	sub	r26, r26
+ 19e:	bb 1b       	sub	r27, r27
+ 1a0:	fd 01       	movw	r30, r26
+ 1a2:	0d c0       	rjmp	.+26     	; 0x1be <__udivmodsi4_ep>
 
-00000198 <__udivmodsi4_loop>:
- 198:	aa 1f       	adc	r26, r26
- 19a:	bb 1f       	adc	r27, r27
- 19c:	ee 1f       	adc	r30, r30
- 19e:	ff 1f       	adc	r31, r31
- 1a0:	a2 17       	cp	r26, r18
- 1a2:	b3 07       	cpc	r27, r19
- 1a4:	e4 07       	cpc	r30, r20
- 1a6:	f5 07       	cpc	r31, r21
- 1a8:	20 f0       	brcs	.+8      	; 0x1b2 <__udivmodsi4_ep>
- 1aa:	a2 1b       	sub	r26, r18
- 1ac:	b3 0b       	sbc	r27, r19
- 1ae:	e4 0b       	sbc	r30, r20
- 1b0:	f5 0b       	sbc	r31, r21
+000001a4 <__udivmodsi4_loop>:
+ 1a4:	aa 1f       	adc	r26, r26
+ 1a6:	bb 1f       	adc	r27, r27
+ 1a8:	ee 1f       	adc	r30, r30
+ 1aa:	ff 1f       	adc	r31, r31
+ 1ac:	a2 17       	cp	r26, r18
+ 1ae:	b3 07       	cpc	r27, r19
+ 1b0:	e4 07       	cpc	r30, r20
+ 1b2:	f5 07       	cpc	r31, r21
+ 1b4:	20 f0       	brcs	.+8      	; 0x1be <__udivmodsi4_ep>
+ 1b6:	a2 1b       	sub	r26, r18
+ 1b8:	b3 0b       	sbc	r27, r19
+ 1ba:	e4 0b       	sbc	r30, r20
+ 1bc:	f5 0b       	sbc	r31, r21
 
-000001b2 <__udivmodsi4_ep>:
- 1b2:	66 1f       	adc	r22, r22
- 1b4:	77 1f       	adc	r23, r23
- 1b6:	88 1f       	adc	r24, r24
- 1b8:	99 1f       	adc	r25, r25
- 1ba:	1a 94       	dec	r1
- 1bc:	69 f7       	brne	.-38     	; 0x198 <__udivmodsi4_loop>
- 1be:	60 95       	com	r22
- 1c0:	70 95       	com	r23
- 1c2:	80 95       	com	r24
- 1c4:	90 95       	com	r25
- 1c6:	9b 01       	movw	r18, r22
- 1c8:	ac 01       	movw	r20, r24
- 1ca:	bd 01       	movw	r22, r26
- 1cc:	cf 01       	movw	r24, r30
- 1ce:	08 95       	ret
+000001be <__udivmodsi4_ep>:
+ 1be:	66 1f       	adc	r22, r22
+ 1c0:	77 1f       	adc	r23, r23
+ 1c2:	88 1f       	adc	r24, r24
+ 1c4:	99 1f       	adc	r25, r25
+ 1c6:	1a 94       	dec	r1
+ 1c8:	69 f7       	brne	.-38     	; 0x1a4 <__udivmodsi4_loop>
+ 1ca:	60 95       	com	r22
+ 1cc:	70 95       	com	r23
+ 1ce:	80 95       	com	r24
+ 1d0:	90 95       	com	r25
+ 1d2:	9b 01       	movw	r18, r22
+ 1d4:	ac 01       	movw	r20, r24
+ 1d6:	bd 01       	movw	r22, r26
+ 1d8:	cf 01       	movw	r24, r30
+ 1da:	08 95       	ret
 
-000001d0 <_exit>:
- 1d0:	f8 94       	cli
+000001dc <_exit>:
+ 1dc:	f8 94       	cli
 
-000001d2 <__stop_program>:
- 1d2:	ff cf       	rjmp	.-2      	; 0x1d2 <__stop_program>
+000001de <__stop_program>:
+ 1de:	ff cf       	rjmp	.-2      	; 0x1de <__stop_program>

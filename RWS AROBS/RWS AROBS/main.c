@@ -15,6 +15,9 @@
 #define CLEARPORTB(PIN) PORTB &=~ (1<<(PIN))
 #define SETPORTC(PIN) PORTC|=(1<<(PIN))
 #define CLEARPORTC(PIN) PORTC &=~(1<<PIN)
+#define F_PROC (4000000)
+#define BAUD (38400)
+#define MyUBBR ((F_PROC/(8*BAUD)-1)
 extern volatile uint32_t GlobalMillTimer;
 typedef enum{
 	APort = 0,
@@ -33,10 +36,12 @@ int main(void)
 	unsigned char i; 
 	cli();
 	Timer0Init();
-	
+	UARTInit(MyUBBR);
 	sei();
-//	DDRB = 0x02;
+
 	DDRC = 0x3F;
+	
+	UARTSendString("ARDUINO");
 	
     /* Replace with your application code */
     while (1) 
@@ -47,20 +52,7 @@ int main(void)
 			ControlPin(CPort,1,pinstate);
 			pinstate^=1;
 		}  
-/*
-		ControlPin(BPort,1,pinstate);
-		ControlPin(CPort,4,pinstate);
-		_delay_ms(1000);
-		pinstate^=1;*/
-	#if 0
-	for (i=0; i<=5; i++)
-	{
-		ControlPin(CPort,i,pinstate);
-		_delay_ms(1000);
-	}
-		pinstate^=1;
-    }	  
-	#endif
+	
 }
 }
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
