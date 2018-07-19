@@ -8,9 +8,7 @@
 
 #ifndef UARTMODULE_H_
 #define UARTMODULE_H_
-
-
-
-
-
+void UARTInit(uint16_t ubrr);
+void UARTSendChar(uint8_t uartMessage);
+void UARTSendString(char* myString);
 #endif /* UARTMODULE_H_ */

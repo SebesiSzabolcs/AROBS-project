@@ -6,3 +6,5 @@ main.c
 
 TimerModule.c
 
+UARTModule.c
+
