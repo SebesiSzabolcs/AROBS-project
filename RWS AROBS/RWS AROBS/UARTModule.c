@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include "UARTModule.h"
 #include <avr/io.h>
+#define CR  0X0D
+#define LF  0X0A
 void UARTInit(uint16_t ubrr){
 	UCSRA = 0x00; // turn everything off
 	UCSRB = 0x00;
@@ -31,4 +33,21 @@ void UARTSendString(char* myString){
 		UARTSendChar(*myString);
 		myString++;
 	}
+}
+void UartSendNewLine(void){
+	UARTSendChar(CR);
+	UARTSendChar(LF);
+}
+
+void UartSendUdec(uint32_t n)
+{
+	// This function uses recursion to convert decimal number
+	//   of unspecified length as an ASCII string
+	if(n >= 10){
+		UartSendUdec(n/10);
+		n = n%10;
+	}
+	UARTSendChar(n+'0'); //GlobalMillTimer is between 0 and 9
+
+
 }

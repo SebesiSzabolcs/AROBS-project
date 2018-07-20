@@ -16,7 +16,6 @@
 #define CLEARPORTB(PIN) PORTB &=~ (1<<(PIN))
 #define SETPORTC(PIN) PORTC|=(1<<(PIN))
 #define CLEARPORTC(PIN) PORTC &=~(1<<PIN)
-
 #define BAUD (38400)
 #define MyUBBR ((F_CPU/(8*BAUD))-1)
 extern volatile uint32_t GlobalMillTimer;
@@ -35,31 +34,40 @@ int main(void)
 {
 	static bool pinstate = true;
 	unsigned char i; 
-	//cli();
-	//Timer0Init();
+	cli();
+	Timer0Init();
 	UARTInit(MyUBBR);
-	//sei();
+	sei();
 	DDRC = 0xFF;
+	PORTC = 0x10;
 	DDRB |= 0x18;
 	ControlPin(BPort,3,0);
 	ControlPin(BPort,4,0);
 	UARTSendString("ARDUINO");
-	
+	UartSendUdec(GlobalMillTimer);
+	UartSendNewLine();
     /* Replace with your application code */
     while (1) 
     {
-		ControlPin(CPort,5,pinstate);
-		pinstate^=1;
-		UARTSendChar(pinstate + 0x30);
-		_delay_ms(1000);
-		/*if ((GlobalMillTimer % 1000) == 0) 
+	
+		if ((GlobalMillTimer % 1000) == 0) 
 		{
-			ControlPin(CPort,5,pinstate);
+			
 			pinstate^=1;
-			UARTSendChar(pinstate + 0x30);
-		} */ 
+			if (pinstate) {
+				//ControlPin(CPort,5,true);
+			}
+			else {
+				//ControlPin(CPort,5,false);
+			}
+			UARTSendChar(PORTC + 0x30);
+			UartSendNewLine();
+			UartSendUdec(GlobalMillTimer);
+			UartSendNewLine();
+		}
 	}
 }
+
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 {
 	static uint16_t counter = 0;

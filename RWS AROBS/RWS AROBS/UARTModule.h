@@ -11,4 +11,6 @@
 void UARTInit(uint16_t ubrr);
 void UARTSendChar(uint8_t uartMessage);
 void UARTSendString(char* myString);
+void UartSendUdec(uint32_t n);
+void UartSendNewLine(void);
 #endif /* UARTMODULE_H_ */

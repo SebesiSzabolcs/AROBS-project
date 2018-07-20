@@ -3,31 +3,31 @@ RWS AROBS.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000001cc  00000000  00000000  00000094  2**1
+  0 .text         000002ac  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000000a  00800060  000001cc  00000260  2**0
+  1 .data         0000000a  00800060  000002ac  00000340  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000006  0080006a  0080006a  0000026a  2**0
+  2 .bss          00000006  0080006a  0080006a  0000034a  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000026a  2**0
+  3 .comment      00000030  00000000  00000000  0000034a  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000029c  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000037c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000080  00000000  00000000  000002d8  2**0
+  5 .debug_aranges 00000090  00000000  00000000  000003b8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000008e9  00000000  00000000  00000358  2**0
+  6 .debug_info   00000950  00000000  00000000  00000448  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006d9  00000000  00000000  00000c41  2**0
+  7 .debug_abbrev 000006cb  00000000  00000000  00000d98  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000004aa  00000000  00000000  0000131a  2**0
+  8 .debug_line   000004c3  00000000  00000000  00001463  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000d8  00000000  00000000  000017c4  2**2
+  9 .debug_frame  0000010c  00000000  00000000  00001928  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000040d  00000000  00000000  0000189c  2**0
+ 10 .debug_str    000003e8  00000000  00000000  00001a34  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000176  00000000  00000000  00001ca9  2**0
+ 11 .debug_loc    000001eb  00000000  00000000  00001e1c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000050  00000000  00000000  00001e1f  2**0
+ 12 .debug_ranges 00000060  00000000  00000000  00002007  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -42,7 +42,7 @@ Disassembly of section .text:
    c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
    e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
   10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
-  12:	90 c0       	rjmp	.+288    	; 0x134 <__vector_9>
+  12:	be c0       	rjmp	.+380    	; 0x190 <__vector_9>
   14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
   16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
   18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
@@ -65,8 +65,8 @@ Disassembly of section .text:
   32:	10 e0       	ldi	r17, 0x00	; 0
   34:	a0 e6       	ldi	r26, 0x60	; 96
   36:	b0 e0       	ldi	r27, 0x00	; 0
-  38:	ec ec       	ldi	r30, 0xCC	; 204
-  3a:	f1 e0       	ldi	r31, 0x01	; 1
+  38:	ec ea       	ldi	r30, 0xAC	; 172
+  3a:	f2 e0       	ldi	r31, 0x02	; 2
   3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
   3e:	05 90       	lpm	r0, Z+
   40:	0d 92       	st	X+, r0
@@ -88,14 +88,14 @@ Disassembly of section .text:
   54:	b2 07       	cpc	r27, r18
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
   58:	43 d0       	rcall	.+134    	; 0xe0 <main>
-  5a:	b6 c0       	rjmp	.+364    	; 0x1c8 <_exit>
+  5a:	26 c1       	rjmp	.+588    	; 0x2a8 <_exit>
 
 0000005c <__bad_interrupt>:
   5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
 
 0000005e <ControlPin>:
-	}
 }
+
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 {
 	static uint16_t counter = 0;
@@ -176,199 +176,346 @@ void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
   de:	08 95       	ret
 
 000000e0 <main>:
+
+int main(void)
 {
 	static bool pinstate = true;
 	unsigned char i; 
-	//cli();
-	//Timer0Init();
+	cli();
+  e0:	f8 94       	cli
+	Timer0Init();
+  e2:	4c d0       	rcall	.+152    	; 0x17c <Timer0Init>
 	UARTInit(MyUBBR);
-  e0:	8c e0       	ldi	r24, 0x0C	; 12
-  e2:	90 e0       	ldi	r25, 0x00	; 0
-  e4:	52 d0       	rcall	.+164    	; 0x18a <UARTInit>
-	//sei();
+  e4:	8c e0       	ldi	r24, 0x0C	; 12
+  e6:	90 e0       	ldi	r25, 0x00	; 0
+  e8:	7e d0       	rcall	.+252    	; 0x1e6 <UARTInit>
+	sei();
+  ea:	78 94       	sei
 	DDRC = 0xFF;
-  e6:	8f ef       	ldi	r24, 0xFF	; 255
-  e8:	84 bb       	out	0x14, r24	; 20
+  ec:	8f ef       	ldi	r24, 0xFF	; 255
+  ee:	84 bb       	out	0x14, r24	; 20
+	PORTC = 0x10;
+  f0:	80 e1       	ldi	r24, 0x10	; 16
+  f2:	85 bb       	out	0x15, r24	; 21
 	DDRB |= 0x18;
-  ea:	87 b3       	in	r24, 0x17	; 23
-  ec:	88 61       	ori	r24, 0x18	; 24
-  ee:	87 bb       	out	0x17, r24	; 23
+  f4:	87 b3       	in	r24, 0x17	; 23
+  f6:	88 61       	ori	r24, 0x18	; 24
+  f8:	87 bb       	out	0x17, r24	; 23
 	ControlPin(BPort,3,0);
-  f0:	40 e0       	ldi	r20, 0x00	; 0
-  f2:	63 e0       	ldi	r22, 0x03	; 3
-  f4:	81 e0       	ldi	r24, 0x01	; 1
-  f6:	b3 df       	rcall	.-154    	; 0x5e <ControlPin>
+  fa:	40 e0       	ldi	r20, 0x00	; 0
+  fc:	63 e0       	ldi	r22, 0x03	; 3
+  fe:	81 e0       	ldi	r24, 0x01	; 1
+ 100:	ae df       	rcall	.-164    	; 0x5e <ControlPin>
 	ControlPin(BPort,4,0);
-  f8:	40 e0       	ldi	r20, 0x00	; 0
-  fa:	64 e0       	ldi	r22, 0x04	; 4
-  fc:	81 e0       	ldi	r24, 0x01	; 1
-  fe:	af df       	rcall	.-162    	; 0x5e <ControlPin>
+ 102:	40 e0       	ldi	r20, 0x00	; 0
+ 104:	64 e0       	ldi	r22, 0x04	; 4
+ 106:	81 e0       	ldi	r24, 0x01	; 1
+ 108:	aa df       	rcall	.-172    	; 0x5e <ControlPin>
 	UARTSendString("ARDUINO");
- 100:	81 e6       	ldi	r24, 0x61	; 97
- 102:	90 e0       	ldi	r25, 0x00	; 0
- 104:	53 d0       	rcall	.+166    	; 0x1ac <UARTSendString>
-	
+ 10a:	81 e6       	ldi	r24, 0x61	; 97
+ 10c:	90 e0       	ldi	r25, 0x00	; 0
+ 10e:	7c d0       	rcall	.+248    	; 0x208 <UARTSendString>
+	UartSendUdec(GlobalMillTimer);
+ 110:	60 91 6c 00 	lds	r22, 0x006C	; 0x80006c <GlobalMillTimer>
+ 114:	70 91 6d 00 	lds	r23, 0x006D	; 0x80006d <GlobalMillTimer+0x1>
+ 118:	80 91 6e 00 	lds	r24, 0x006E	; 0x80006e <GlobalMillTimer+0x2>
+ 11c:	90 91 6f 00 	lds	r25, 0x006F	; 0x80006f <GlobalMillTimer+0x3>
+ 120:	86 d0       	rcall	.+268    	; 0x22e <UartSendUdec>
+	UartSendNewLine();
+ 122:	80 d0       	rcall	.+256    	; 0x224 <UartSendNewLine>
     /* Replace with your application code */
     while (1) 
     {
-		ControlPin(CPort,5,pinstate);
-		pinstate^=1;
- 106:	d1 e0       	ldi	r29, 0x01	; 1
-	UARTSendString("ARDUINO");
 	
+		if ((GlobalMillTimer % 1000) == 0) 
+ 124:	0f 2e       	mov	r0, r31
+ 126:	f8 ee       	ldi	r31, 0xE8	; 232
+ 128:	cf 2e       	mov	r12, r31
+ 12a:	f3 e0       	ldi	r31, 0x03	; 3
+ 12c:	df 2e       	mov	r13, r31
+ 12e:	e1 2c       	mov	r14, r1
+ 130:	f1 2c       	mov	r15, r1
+ 132:	f0 2d       	mov	r31, r0
+		{
+			
+			pinstate^=1;
+ 134:	c1 e0       	ldi	r28, 0x01	; 1
+	UartSendNewLine();
     /* Replace with your application code */
     while (1) 
     {
-		ControlPin(CPort,5,pinstate);
- 108:	c0 91 60 00 	lds	r28, 0x0060	; 0x800060 <__data_start>
- 10c:	4c 2f       	mov	r20, r28
- 10e:	65 e0       	ldi	r22, 0x05	; 5
- 110:	82 e0       	ldi	r24, 0x02	; 2
- 112:	a5 df       	rcall	.-182    	; 0x5e <ControlPin>
-		pinstate^=1;
- 114:	8c 2f       	mov	r24, r28
- 116:	8d 27       	eor	r24, r29
- 118:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__data_start>
-		UARTSendChar(pinstate + 0x30);
- 11c:	80 5d       	subi	r24, 0xD0	; 208
- 11e:	42 d0       	rcall	.+132    	; 0x1a4 <UARTSendChar>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+	
+		if ((GlobalMillTimer % 1000) == 0) 
+ 136:	60 91 6c 00 	lds	r22, 0x006C	; 0x80006c <GlobalMillTimer>
+ 13a:	70 91 6d 00 	lds	r23, 0x006D	; 0x80006d <GlobalMillTimer+0x1>
+ 13e:	80 91 6e 00 	lds	r24, 0x006E	; 0x80006e <GlobalMillTimer+0x2>
+ 142:	90 91 6f 00 	lds	r25, 0x006F	; 0x80006f <GlobalMillTimer+0x3>
+ 146:	a7 01       	movw	r20, r14
+ 148:	96 01       	movw	r18, r12
+ 14a:	8c d0       	rcall	.+280    	; 0x264 <__udivmodsi4>
+ 14c:	67 2b       	or	r22, r23
+ 14e:	68 2b       	or	r22, r24
+ 150:	69 2b       	or	r22, r25
+ 152:	89 f7       	brne	.-30     	; 0x136 <main+0x56>
+		{
+			
+			pinstate^=1;
+ 154:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__data_start>
+ 158:	8c 27       	eor	r24, r28
+ 15a:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__data_start>
+				//ControlPin(CPort,5,true);
+			}
+			else {
+				//ControlPin(CPort,5,false);
+			}
+			UARTSendChar(PORTC + 0x30);
+ 15e:	85 b3       	in	r24, 0x15	; 21
+ 160:	80 5d       	subi	r24, 0xD0	; 208
+ 162:	4e d0       	rcall	.+156    	; 0x200 <UARTSendChar>
+			UartSendNewLine();
+ 164:	5f d0       	rcall	.+190    	; 0x224 <UartSendNewLine>
+			UartSendUdec(GlobalMillTimer);
+ 166:	60 91 6c 00 	lds	r22, 0x006C	; 0x80006c <GlobalMillTimer>
+ 16a:	70 91 6d 00 	lds	r23, 0x006D	; 0x80006d <GlobalMillTimer+0x1>
+ 16e:	80 91 6e 00 	lds	r24, 0x006E	; 0x80006e <GlobalMillTimer+0x2>
+ 172:	90 91 6f 00 	lds	r25, 0x006F	; 0x80006f <GlobalMillTimer+0x3>
+ 176:	5b d0       	rcall	.+182    	; 0x22e <UartSendUdec>
+			UartSendNewLine();
+ 178:	55 d0       	rcall	.+170    	; 0x224 <UartSendNewLine>
+ 17a:	dd cf       	rjmp	.-70     	; 0x136 <main+0x56>
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 120:	2f ef       	ldi	r18, 0xFF	; 255
- 122:	84 e3       	ldi	r24, 0x34	; 52
- 124:	9c e0       	ldi	r25, 0x0C	; 12
- 126:	21 50       	subi	r18, 0x01	; 1
- 128:	80 40       	sbci	r24, 0x00	; 0
- 12a:	90 40       	sbci	r25, 0x00	; 0
- 12c:	e1 f7       	brne	.-8      	; 0x126 <main+0x46>
- 12e:	00 c0       	rjmp	.+0      	; 0x130 <main+0x50>
- 130:	00 00       	nop
- 132:	ea cf       	rjmp	.-44     	; 0x108 <main+0x28>
-
-00000134 <__vector_9>:
+0000017c <Timer0Init>:
+#include <avr/interrupt.h>
+#include <avr/io.h>
+volatile uint32_t GlobalMillTimer = 0;
+void Timer0Init (void)
+{
+	TCCR0 = (1<<CS01)|(1<<CS00);
+ 17c:	83 e0       	ldi	r24, 0x03	; 3
+ 17e:	83 bf       	out	0x33, r24	; 51
+	TCNT0 = (193);
+ 180:	81 ec       	ldi	r24, 0xC1	; 193
+ 182:	82 bf       	out	0x32, r24	; 50
 	TIMSK |= (1<<TOIE0);
+ 184:	89 b7       	in	r24, 0x39	; 57
+ 186:	81 60       	ori	r24, 0x01	; 1
+ 188:	89 bf       	out	0x39, r24	; 57
 	DDRC = 0X30;	
+ 18a:	80 e3       	ldi	r24, 0x30	; 48
+ 18c:	84 bb       	out	0x14, r24	; 20
+ 18e:	08 95       	ret
+
+00000190 <__vector_9>:
 }
 	
 ISR(TIMER0_OVF_vect)
 {
- 134:	1f 92       	push	r1
- 136:	0f 92       	push	r0
- 138:	0f b6       	in	r0, 0x3f	; 63
- 13a:	0f 92       	push	r0
- 13c:	11 24       	eor	r1, r1
- 13e:	8f 93       	push	r24
- 140:	9f 93       	push	r25
- 142:	af 93       	push	r26
- 144:	bf 93       	push	r27
+ 190:	1f 92       	push	r1
+ 192:	0f 92       	push	r0
+ 194:	0f b6       	in	r0, 0x3f	; 63
+ 196:	0f 92       	push	r0
+ 198:	11 24       	eor	r1, r1
+ 19a:	8f 93       	push	r24
+ 19c:	9f 93       	push	r25
+ 19e:	af 93       	push	r26
+ 1a0:	bf 93       	push	r27
 	PORTC ^= 0X30;
- 146:	95 b3       	in	r25, 0x15	; 21
- 148:	80 e3       	ldi	r24, 0x30	; 48
- 14a:	89 27       	eor	r24, r25
- 14c:	85 bb       	out	0x15, r24	; 21
+ 1a2:	95 b3       	in	r25, 0x15	; 21
+ 1a4:	80 e3       	ldi	r24, 0x30	; 48
+ 1a6:	89 27       	eor	r24, r25
+ 1a8:	85 bb       	out	0x15, r24	; 21
 	GlobalMillTimer ++;
- 14e:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <GlobalMillTimer>
- 152:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <GlobalMillTimer+0x1>
- 156:	a0 91 6e 00 	lds	r26, 0x006E	; 0x80006e <GlobalMillTimer+0x2>
- 15a:	b0 91 6f 00 	lds	r27, 0x006F	; 0x80006f <GlobalMillTimer+0x3>
- 15e:	01 96       	adiw	r24, 0x01	; 1
- 160:	a1 1d       	adc	r26, r1
- 162:	b1 1d       	adc	r27, r1
- 164:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <GlobalMillTimer>
- 168:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <GlobalMillTimer+0x1>
- 16c:	a0 93 6e 00 	sts	0x006E, r26	; 0x80006e <GlobalMillTimer+0x2>
- 170:	b0 93 6f 00 	sts	0x006F, r27	; 0x80006f <GlobalMillTimer+0x3>
+ 1aa:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <GlobalMillTimer>
+ 1ae:	90 91 6d 00 	lds	r25, 0x006D	; 0x80006d <GlobalMillTimer+0x1>
+ 1b2:	a0 91 6e 00 	lds	r26, 0x006E	; 0x80006e <GlobalMillTimer+0x2>
+ 1b6:	b0 91 6f 00 	lds	r27, 0x006F	; 0x80006f <GlobalMillTimer+0x3>
+ 1ba:	01 96       	adiw	r24, 0x01	; 1
+ 1bc:	a1 1d       	adc	r26, r1
+ 1be:	b1 1d       	adc	r27, r1
+ 1c0:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <GlobalMillTimer>
+ 1c4:	90 93 6d 00 	sts	0x006D, r25	; 0x80006d <GlobalMillTimer+0x1>
+ 1c8:	a0 93 6e 00 	sts	0x006E, r26	; 0x80006e <GlobalMillTimer+0x2>
+ 1cc:	b0 93 6f 00 	sts	0x006F, r27	; 0x80006f <GlobalMillTimer+0x3>
 	TCNT0 = (193);
- 174:	81 ec       	ldi	r24, 0xC1	; 193
- 176:	82 bf       	out	0x32, r24	; 50
- 178:	bf 91       	pop	r27
- 17a:	af 91       	pop	r26
- 17c:	9f 91       	pop	r25
- 17e:	8f 91       	pop	r24
- 180:	0f 90       	pop	r0
- 182:	0f be       	out	0x3f, r0	; 63
- 184:	0f 90       	pop	r0
- 186:	1f 90       	pop	r1
- 188:	18 95       	reti
+ 1d0:	81 ec       	ldi	r24, 0xC1	; 193
+ 1d2:	82 bf       	out	0x32, r24	; 50
+ 1d4:	bf 91       	pop	r27
+ 1d6:	af 91       	pop	r26
+ 1d8:	9f 91       	pop	r25
+ 1da:	8f 91       	pop	r24
+ 1dc:	0f 90       	pop	r0
+ 1de:	0f be       	out	0x3f, r0	; 63
+ 1e0:	0f 90       	pop	r0
+ 1e2:	1f 90       	pop	r1
+ 1e4:	18 95       	reti
 
-0000018a <UARTInit>:
- */ 
-#include <stdint.h>
+000001e6 <UARTInit>:
 #include "UARTModule.h"
 #include <avr/io.h>
+#define CR  0X0D
+#define LF  0X0A
 void UARTInit(uint16_t ubrr){
 	UCSRA = 0x00; // turn everything off
- 18a:	1b b8       	out	0x0b, r1	; 11
+ 1e6:	1b b8       	out	0x0b, r1	; 11
 	UCSRB = 0x00;
- 18c:	1a b8       	out	0x0a, r1	; 10
+ 1e8:	1a b8       	out	0x0a, r1	; 10
 	UCSRC = 0x00;
- 18e:	10 bc       	out	0x20, r1	; 32
+ 1ea:	10 bc       	out	0x20, r1	; 32
 	UCSRA = (1<<U2X); // to increase precision use U2X
- 190:	82 e0       	ldi	r24, 0x02	; 2
- 192:	8b b9       	out	0x0b, r24	; 11
+ 1ec:	82 e0       	ldi	r24, 0x02	; 2
+ 1ee:	8b b9       	out	0x0b, r24	; 11
 	UBRRH = 0;//(uint8_t)(ubrr>>8);
- 194:	10 bc       	out	0x20, r1	; 32
+ 1f0:	10 bc       	out	0x20, r1	; 32
 	UBRRL = 12;//(uint8_t)(ubrr);
- 196:	8c e0       	ldi	r24, 0x0C	; 12
- 198:	89 b9       	out	0x09, r24	; 9
+ 1f2:	8c e0       	ldi	r24, 0x0C	; 12
+ 1f4:	89 b9       	out	0x09, r24	; 9
 	UCSRB = (1<<TXEN)/*|(1<<RXEN)|(1<<RXCIE)*/;
- 19a:	88 e0       	ldi	r24, 0x08	; 8
- 19c:	8a b9       	out	0x0a, r24	; 10
+ 1f6:	88 e0       	ldi	r24, 0x08	; 8
+ 1f8:	8a b9       	out	0x0a, r24	; 10
 	UCSRC = (1<<URSEL)|(1<<UCSZ0)|(1<<UCSZ1);
- 19e:	86 e8       	ldi	r24, 0x86	; 134
- 1a0:	80 bd       	out	0x20, r24	; 32
- 1a2:	08 95       	ret
+ 1fa:	86 e8       	ldi	r24, 0x86	; 134
+ 1fc:	80 bd       	out	0x20, r24	; 32
+ 1fe:	08 95       	ret
 
-000001a4 <UARTSendChar>:
+00000200 <UARTSendChar>:
 }
 
 void UARTSendChar(uint8_t uartMessage){
 	while (!(UCSRA & (1<<UDRE))){}
- 1a4:	5d 9b       	sbis	0x0b, 5	; 11
- 1a6:	fe cf       	rjmp	.-4      	; 0x1a4 <UARTSendChar>
+ 200:	5d 9b       	sbis	0x0b, 5	; 11
+ 202:	fe cf       	rjmp	.-4      	; 0x200 <UARTSendChar>
 	UDR = uartMessage;
- 1a8:	8c b9       	out	0x0c, r24	; 12
- 1aa:	08 95       	ret
+ 204:	8c b9       	out	0x0c, r24	; 12
+ 206:	08 95       	ret
 
-000001ac <UARTSendString>:
+00000208 <UARTSendString>:
 	
 }
 
 
 
 void UARTSendString(char* myString){
- 1ac:	cf 93       	push	r28
- 1ae:	df 93       	push	r29
- 1b0:	ec 01       	movw	r28, r24
+ 208:	cf 93       	push	r28
+ 20a:	df 93       	push	r29
+ 20c:	ec 01       	movw	r28, r24
 	while(*myString){
- 1b2:	88 81       	ld	r24, Y
- 1b4:	88 23       	and	r24, r24
- 1b6:	29 f0       	breq	.+10     	; 0x1c2 <UARTSendString+0x16>
- 1b8:	21 96       	adiw	r28, 0x01	; 1
+ 20e:	88 81       	ld	r24, Y
+ 210:	88 23       	and	r24, r24
+ 212:	29 f0       	breq	.+10     	; 0x21e <UARTSendString+0x16>
+ 214:	21 96       	adiw	r28, 0x01	; 1
 		UARTSendChar(*myString);
- 1ba:	f4 df       	rcall	.-24     	; 0x1a4 <UARTSendChar>
+ 216:	f4 df       	rcall	.-24     	; 0x200 <UARTSendChar>
 }
 
 
 
 void UARTSendString(char* myString){
 	while(*myString){
- 1bc:	89 91       	ld	r24, Y+
- 1be:	81 11       	cpse	r24, r1
- 1c0:	fc cf       	rjmp	.-8      	; 0x1ba <UARTSendString+0xe>
+ 218:	89 91       	ld	r24, Y+
+ 21a:	81 11       	cpse	r24, r1
+ 21c:	fc cf       	rjmp	.-8      	; 0x216 <UARTSendString+0xe>
 		UARTSendChar(*myString);
 		myString++;
 	}
- 1c2:	df 91       	pop	r29
- 1c4:	cf 91       	pop	r28
- 1c6:	08 95       	ret
+}
+ 21e:	df 91       	pop	r29
+ 220:	cf 91       	pop	r28
+ 222:	08 95       	ret
 
-000001c8 <_exit>:
- 1c8:	f8 94       	cli
+00000224 <UartSendNewLine>:
+void UartSendNewLine(void){
+	UARTSendChar(CR);
+ 224:	8d e0       	ldi	r24, 0x0D	; 13
+ 226:	ec df       	rcall	.-40     	; 0x200 <UARTSendChar>
+	UARTSendChar(LF);
+ 228:	8a e0       	ldi	r24, 0x0A	; 10
+ 22a:	ea df       	rcall	.-44     	; 0x200 <UARTSendChar>
+ 22c:	08 95       	ret
 
-000001ca <__stop_program>:
- 1ca:	ff cf       	rjmp	.-2      	; 0x1ca <__stop_program>
+0000022e <UartSendUdec>:
+}
+
+void UartSendUdec(uint32_t n)
+{
+ 22e:	0f 93       	push	r16
+ 230:	1f 93       	push	r17
+ 232:	cf 93       	push	r28
+ 234:	df 93       	push	r29
+	// This function uses recursion to convert decimal number
+	//   of unspecified length as an ASCII string
+	if(n >= 10){
+ 236:	6a 30       	cpi	r22, 0x0A	; 10
+ 238:	71 05       	cpc	r23, r1
+ 23a:	81 05       	cpc	r24, r1
+ 23c:	91 05       	cpc	r25, r1
+ 23e:	50 f0       	brcs	.+20     	; 0x254 <UartSendUdec+0x26>
+		UartSendUdec(n/10);
+ 240:	2a e0       	ldi	r18, 0x0A	; 10
+ 242:	30 e0       	ldi	r19, 0x00	; 0
+ 244:	40 e0       	ldi	r20, 0x00	; 0
+ 246:	50 e0       	ldi	r21, 0x00	; 0
+ 248:	0d d0       	rcall	.+26     	; 0x264 <__udivmodsi4>
+ 24a:	06 2f       	mov	r16, r22
+ 24c:	ca 01       	movw	r24, r20
+ 24e:	b9 01       	movw	r22, r18
+ 250:	ee df       	rcall	.-36     	; 0x22e <UartSendUdec>
+		n = n%10;
+ 252:	60 2f       	mov	r22, r16
+	}
+	UARTSendChar(n+'0'); //GlobalMillTimer is between 0 and 9
+ 254:	80 e3       	ldi	r24, 0x30	; 48
+ 256:	86 0f       	add	r24, r22
+ 258:	d3 df       	rcall	.-90     	; 0x200 <UARTSendChar>
+
+
+ 25a:	df 91       	pop	r29
+ 25c:	cf 91       	pop	r28
+ 25e:	1f 91       	pop	r17
+ 260:	0f 91       	pop	r16
+ 262:	08 95       	ret
+
+00000264 <__udivmodsi4>:
+ 264:	a1 e2       	ldi	r26, 0x21	; 33
+ 266:	1a 2e       	mov	r1, r26
+ 268:	aa 1b       	sub	r26, r26
+ 26a:	bb 1b       	sub	r27, r27
+ 26c:	fd 01       	movw	r30, r26
+ 26e:	0d c0       	rjmp	.+26     	; 0x28a <__udivmodsi4_ep>
+
+00000270 <__udivmodsi4_loop>:
+ 270:	aa 1f       	adc	r26, r26
+ 272:	bb 1f       	adc	r27, r27
+ 274:	ee 1f       	adc	r30, r30
+ 276:	ff 1f       	adc	r31, r31
+ 278:	a2 17       	cp	r26, r18
+ 27a:	b3 07       	cpc	r27, r19
+ 27c:	e4 07       	cpc	r30, r20
+ 27e:	f5 07       	cpc	r31, r21
+ 280:	20 f0       	brcs	.+8      	; 0x28a <__udivmodsi4_ep>
+ 282:	a2 1b       	sub	r26, r18
+ 284:	b3 0b       	sbc	r27, r19
+ 286:	e4 0b       	sbc	r30, r20
+ 288:	f5 0b       	sbc	r31, r21
+
+0000028a <__udivmodsi4_ep>:
+ 28a:	66 1f       	adc	r22, r22
+ 28c:	77 1f       	adc	r23, r23
+ 28e:	88 1f       	adc	r24, r24
+ 290:	99 1f       	adc	r25, r25
+ 292:	1a 94       	dec	r1
+ 294:	69 f7       	brne	.-38     	; 0x270 <__udivmodsi4_loop>
+ 296:	60 95       	com	r22
+ 298:	70 95       	com	r23
+ 29a:	80 95       	com	r24
+ 29c:	90 95       	com	r25
+ 29e:	9b 01       	movw	r18, r22
+ 2a0:	ac 01       	movw	r20, r24
+ 2a2:	bd 01       	movw	r22, r26
+ 2a4:	cf 01       	movw	r24, r30
+ 2a6:	08 95       	ret
+
+000002a8 <_exit>:
+ 2a8:	f8 94       	cli
+
+000002aa <__stop_program>:
+ 2aa:	ff cf       	rjmp	.-2      	; 0x2aa <__stop_program>
