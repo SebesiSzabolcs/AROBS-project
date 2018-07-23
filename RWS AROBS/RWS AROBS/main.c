@@ -19,6 +19,7 @@
 #define BAUD (38400)
 #define MyUBBR ((F_CPU/(8*BAUD))-1)
 extern volatile uint32_t GlobalMillTimer;
+
 typedef enum{
 	APort = 0,
 	BPort,
@@ -27,9 +28,22 @@ typedef enum{
 	EPort,
 	FPort } EN_Port_Type;
 	
-
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState);
-
+static void PrintStatus(char* MyString, uint8_t Devider, uint32_t MyValue)
+{
+	UARTSendString(MyString);
+	UARTSendString(": ");
+	
+	if (Devider == 1)
+	{
+		UartSendUdec(MyValue);
+	} 
+	else 
+	{
+		UARTSendChar((uint8_t)MyValue);
+	}
+	UartSendNewLine();
+}
 int main(void)
 {
 	static bool pinstate = true;
@@ -39,35 +53,48 @@ int main(void)
 	UARTInit(MyUBBR);
 	sei();
 	DDRC = 0xFF;
-	PORTC = 0x10;
 	DDRB |= 0x18;
 	ControlPin(BPort,3,0);
 	ControlPin(BPort,4,0);
-	UARTSendString("ARDUINO");
+	//UARTSendString("ARDUINO"); /*just for UART test */
 	UartSendUdec(GlobalMillTimer);
 	UartSendNewLine();
     /* Replace with your application code */
     while (1) 
     {
-	
+#if 0
 		if ((GlobalMillTimer % 1000) == 0) 
 		{
 			
 			pinstate^=1;
 			if (pinstate) {
-				//ControlPin(CPort,5,true);
+				ControlPin(CPort,5,true);
 			}
 			else {
-				//ControlPin(CPort,5,false);
+				ControlPin(CPort,5,false);
 			}
-			UARTSendChar(PORTC + 0x30);
-			UartSendNewLine();
-			UartSendUdec(GlobalMillTimer);
-			UartSendNewLine();
+				
+			PrintStatus("PortC Current State", 0 , PORTC + 0x30);
+			PrintStatus("Timer Status", 1, GlobalMillTimer);
 		}
 	}
+#endif
+	i = UARTReceiveChar();
+	_delay_ms(1000);
+	if(i=='F')
+	{
+		ControlPin(CPort,5,true);
+	}
+	else if (i== 'G')
+	{
+		ControlPin(CPort,5,false);
+	}
+	else 
+	{
+		PrintStatus("Hibas gomb",0, i);
+	}
 }
-
+}
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 {
 	static uint16_t counter = 0;

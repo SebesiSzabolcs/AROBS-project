@@ -13,12 +13,10 @@ void Timer0Init (void)
 	TCCR0 = (1<<CS01)|(1<<CS00);
 	TCNT0 = (193);
 	TIMSK |= (1<<TOIE0);
-	DDRC = 0X30;	
 }
 	
 ISR(TIMER0_OVF_vect)
 {
-	PORTC ^= 0X30;
 	GlobalMillTimer ++;
 	TCNT0 = (193);
 }

@@ -13,4 +13,5 @@ void UARTSendChar(uint8_t uartMessage);
 void UARTSendString(char* myString);
 void UartSendUdec(uint32_t n);
 void UartSendNewLine(void);
+char UARTReceiveChar(void);
 #endif /* UARTMODULE_H_ */

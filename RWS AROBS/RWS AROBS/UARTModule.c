@@ -16,7 +16,7 @@ void UARTInit(uint16_t ubrr){
 	UCSRA = (1<<U2X); // to increase precision use U2X
 	UBRRH = 0;//(uint8_t)(ubrr>>8);
 	UBRRL = 12;//(uint8_t)(ubrr);
-	UCSRB = (1<<TXEN)/*|(1<<RXEN)|(1<<RXCIE)*/;
+	UCSRB = (1<<TXEN)|(1<<RXEN)/*|(1<<RXCIE)*/;
 	UCSRC = (1<<URSEL)|(1<<UCSZ0)|(1<<UCSZ1);
 }
 
@@ -50,4 +50,10 @@ void UartSendUdec(uint32_t n)
 	UARTSendChar(n+'0'); //GlobalMillTimer is between 0 and 9
 
 
+}
+char UARTReceiveChar(void)
+{
+	char MyRead = 0;
+	MyRead = UDR;
+	return MyRead;
 }
