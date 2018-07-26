@@ -54,6 +54,7 @@ void UartSendUdec(uint32_t n)
 char UARTReceiveChar(void)
 {
 	char MyRead = 0;
+	while ( !(UCSRA & (1<<RXC)) ){}
 	MyRead = UDR;
 	return MyRead;
 }

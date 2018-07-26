@@ -18,6 +18,12 @@
 #define CLEARPORTC(PIN) PORTC &=~(1<<PIN)
 #define BAUD (38400)
 #define MyUBBR ((F_CPU/(8*BAUD))-1)
+#define ESP_RESET_PORT DPort
+#define ESP_RESET_PIN (7)
+#define ESP_ENABLE_PORT DPort
+#define ESP_ENABLE_PIN (6)
+#define STATUS_LED_PORT DPort
+#define STATUS_LED_PIN (4)
 extern volatile uint32_t GlobalMillTimer;
 
 typedef enum{
@@ -32,7 +38,7 @@ void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState);
 static void PrintStatus(char* MyString, uint8_t Devider, uint32_t MyValue)
 {
 	UARTSendString(MyString);
-	UARTSendString(": ");
+	//UARTSendString(": ");
 	
 	if (Devider == 1)
 	{
@@ -47,16 +53,17 @@ static void PrintStatus(char* MyString, uint8_t Devider, uint32_t MyValue)
 int main(void)
 {
 	static bool pinstate = true;
-	unsigned char i; 
+	volatile unsigned char i; 
+	volatile unsigned char oldi = 0; //to check when the i variable change the value
 	cli();
 	Timer0Init();
 	UARTInit(MyUBBR);
 	sei();
-	DDRC = 0xFF;
+	
 	DDRB |= 0x18;
 	ControlPin(BPort,3,0);
 	ControlPin(BPort,4,0);
-	//UARTSendString("ARDUINO"); /*just for UART test */
+
 	UartSendUdec(GlobalMillTimer);
 	UartSendNewLine();
     /* Replace with your application code */
@@ -68,10 +75,10 @@ int main(void)
 			
 			pinstate^=1;
 			if (pinstate) {
-				ControlPin(CPort,5,true);
+				ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,true);
 			}
 			else {
-				ControlPin(CPort,5,false);
+				ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,false);
 			}
 				
 			PrintStatus("PortC Current State", 0 , PORTC + 0x30);
@@ -80,20 +87,23 @@ int main(void)
 	}
 #endif
 	i = UARTReceiveChar();
-	_delay_ms(1000);
-	if(i=='F')
+	
+	if (oldi != i )
 	{
-		ControlPin(CPort,5,true);
-	}
-	else if (i== 'G')
-	{
-		ControlPin(CPort,5,false);
-	}
-	else 
-	{
-		PrintStatus("Hibas gomb",0, i);
-	}
-}
+		//PrintStatus("",0, i);
+		UARTSendChar(i);
+		if(i=='F')
+		{
+			ControlPin(CPort,5,true);
+		}
+		else if (i== 'G')
+		{
+			ControlPin(CPort,5,false);
+		}
+
+		oldi = i;
+	} 
+} 
 }
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 {
