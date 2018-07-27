@@ -16,6 +16,8 @@
 #define CLEARPORTB(PIN) PORTB &=~ (1<<(PIN))
 #define SETPORTC(PIN) PORTC|=(1<<(PIN))
 #define CLEARPORTC(PIN) PORTC &=~(1<<PIN)
+#define SETPORTD(PIN) PORTD|=(1<<(PIN))
+#define CLEARPORTD(PIN) PORTD &=~(1<<PIN)
 #define BAUD (38400)
 #define MyUBBR ((F_CPU/(8*BAUD))-1)
 #define ESP_RESET_PORT DPort
@@ -50,42 +52,40 @@ static void PrintStatus(char* MyString, uint8_t Devider, uint32_t MyValue)
 	}
 	UartSendNewLine();
 }
+void EspOff(void)
+{
+	DDRD |= 0XC0;
+	ControlPin(ESP_RESET_PORT,ESP_RESET_PIN,0);
+	ControlPin(ESP_ENABLE_PORT,ESP_ENABLE_PIN,0);	
+}
+
 int main(void)
 {
-	static bool pinstate = true;
+	static char pinstate = true;
 	volatile unsigned char i; 
 	volatile unsigned char oldi = 0; //to check when the i variable change the value
+	DDRD |= (1<< STATUS_LED_PIN);
 	cli();
 	Timer0Init();
 	UARTInit(MyUBBR);
 	sei();
-	
-	DDRB |= 0x18;
-	ControlPin(BPort,3,0);
-	ControlPin(BPort,4,0);
-
+	EspOff();	
 	UartSendUdec(GlobalMillTimer);
 	UartSendNewLine();
     /* Replace with your application code */
     while (1) 
     {
-#if 0
+#if 1
 		if ((GlobalMillTimer % 1000) == 0) 
-		{
-			
+		{	
 			pinstate^=1;
-			if (pinstate) {
-				ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,true);
-			}
-			else {
-				ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,false);
-			}
-				
-			PrintStatus("PortC Current State", 0 , PORTC + 0x30);
-			PrintStatus("Timer Status", 1, GlobalMillTimer);
-		}
-	}
+			if(pinstate){ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,true);}
+			else{ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,false);}
+			PrintStatus("Timer current value: ",1, GlobalMillTimer);
+					}
 #endif
+
+#if 0
 	i = UARTReceiveChar();
 	
 	if (oldi != i )
@@ -103,6 +103,8 @@ int main(void)
 
 		oldi = i;
 	} 
+#endif	
+	
 } 
 }
 void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
@@ -124,7 +126,15 @@ void ControlPin(EN_Port_Type Port2Control, uint8_t pinNr, bool pinState)
 				CLEARPORTC(pinNr);	
 			}
 		break;
+		case (DPort):
+			if(pinState){
+				SETPORTD(pinNr);
+			}else{
+				CLEARPORTD(pinNr);
+			}
+		break;
 		default:
 		break;
+	
 	}
 }
