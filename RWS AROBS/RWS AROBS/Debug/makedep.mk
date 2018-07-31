@@ -4,6 +4,8 @@
 
 main.c
 
+SPIModule.c
+
 TimerModule.c
 
 UARTModule.c

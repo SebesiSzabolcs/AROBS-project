@@ -12,6 +12,7 @@
 #include <util/delay.h>
 #include "TimerModule.h"
 #include "UARTModule.h"
+#include "SPIModule.h"
 #define SETPORTB(PIN) PORTB|=(1<<(PIN))
 #define CLEARPORTB(PIN) PORTB &=~ (1<<(PIN))
 #define SETPORTC(PIN) PORTC|=(1<<(PIN))
@@ -27,6 +28,10 @@
 #define STATUS_LED_PORT DPort
 #define STATUS_LED_PIN (4)
 extern volatile uint32_t GlobalMillTimer;
+#define SPI_SS_PORT BPort
+#define SPI_SS_PIN (0)
+#define SPI_CLEAR_SS ControlPin(SPI_SS_PORT,SPI_SS_PIN, 0)
+#define SPI_SET_SS ControlPin(SPI_SS_PORT,SPI_SS_PIN, 1)
 
 typedef enum{
 	APort = 0,
@@ -61,12 +66,16 @@ void EspOff(void)
 
 int main(void)
 {
+	
 	static char pinstate = true;
 	volatile unsigned char i; 
 	volatile unsigned char oldi = 0; //to check when the i variable change the value
 	DDRD |= (1<< STATUS_LED_PIN);
+	DDRB |= (1<< SPI_SS_PIN); //set PB0 to output because the SPI Slave select
+	
 	cli();
 	Timer0Init();
+	SPIInit();
 	UARTInit(MyUBBR);
 	sei();
 	EspOff();	
@@ -75,6 +84,10 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
+		SPI_CLEAR_SS;
+		SPISendByte(0x55);
+		_delay_ms(10);
+		SPI_SET_SS;
 #if 1
 		if ((GlobalMillTimer % 1000) == 0) 
 		{	
@@ -82,7 +95,7 @@ int main(void)
 			if(pinstate){ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,true);}
 			else{ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,false);}
 			PrintStatus("Timer current value: ",1, GlobalMillTimer);
-					}
+		}
 #endif
 
 #if 0
