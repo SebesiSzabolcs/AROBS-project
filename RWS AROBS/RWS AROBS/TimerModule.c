@@ -19,4 +19,5 @@ ISR(TIMER0_OVF_vect)
 {
 	GlobalMillTimer ++;
 	TCNT0 = (193);
+	//PORTB ^= (1<<5);
 }

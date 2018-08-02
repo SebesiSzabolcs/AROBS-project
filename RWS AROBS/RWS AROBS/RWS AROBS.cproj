@@ -142,9 +142,6 @@
     <Compile Include="SPIModule.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SPIModule.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="TimerModule.c">
       <SubType>compile</SubType>
     </Compile>
