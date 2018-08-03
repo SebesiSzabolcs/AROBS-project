@@ -30,8 +30,8 @@
 extern volatile uint32_t GlobalMillTimer;
 #define SPI_SS_PORT BPort
 #define SPI_SS_PIN (0)
-#define SPI_CLEAR_SS ControlPin(SPI_SS_PORT,SPI_SS_PIN, false)
-#define SPI_SET_SS ControlPin(SPI_SS_PORT,SPI_SS_PIN, true)
+#define SPI_CLEAR_CS280 ControlPin(SPI_SS_PORT,SPI_SS_PIN, false)
+#define SPI_SET_CS280  ControlPin(SPI_SS_PORT,SPI_SS_PIN, true)
 
 typedef enum{
 	APort = 0,
@@ -68,38 +68,35 @@ int main(void)
 {
 	
 	static char pinstate = true;
-	unsigned char i; 
+	uint8_t i; 
 	volatile unsigned char oldi = 0; //to check when the i variable change the value
 	DDRD |= (1<< STATUS_LED_PIN);
 	DDRB |= (1<< SPI_SS_PIN); //set PB0 to output because the SPI Slave select
 	
 	cli();
-	//Timer0Init();
-	//UARTInit(MyUBBR);
-	//sei();
+	Timer0Init();
+	UARTInit(MyUBBR);
+	sei();
 	EspOff();	
-	//UartSendUdec(GlobalMillTimer);
-	//UartSendNewLine();
+	
 	SPIInit();
+	
     /* Replace with your application code */
-	//DDRB |= (1<<5)|(1<<3);
+
     while (1) 
     {
+		//UartSendUdec(GlobalMillTimer);
+		UartSendNewLine();
+		SPI_CLEAR_CS280 ;
+		SPISendByte(0xD0);
+		UARTSendChar(SPIRecieveByte());
+		//UARTSendChar(SPIRecieveByte());
+		//i = SPIRecieveByte();
+		SPI_SET_CS280 ;
+		//UARTSendChar(i);
+		UartSendNewLine();
 		
-		SPI_CLEAR_SS;
-		//SPISendByte(0x55);
-		SPDR ^= 0x55;
-		ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,0);
-		while(!(SPSR & (1<<SPIF)))
-		;
-		ControlPin(STATUS_LED_PORT,STATUS_LED_PIN,1);
-		SPI_SET_SS;
-		
-		i ^= 1;
-		
-		
-		
-#if 0
+#if 1
 		if ((GlobalMillTimer % 1000) == 0) 
 		{	
 			pinstate^=1;
@@ -109,25 +106,7 @@ int main(void)
 		}
 #endif
 
-#if 0
-	i = UARTReceiveChar();
-	
-	if (oldi != i )
-	{
-		//PrintStatus("",0, i);
-		UARTSendChar(i);
-		if(i=='F')
-		{
-			ControlPin(CPort,5,true);
-		}
-		else if (i== 'G')
-		{
-			ControlPin(CPort,5,false);
-		}
 
-		oldi = i;
-	} 
-#endif	
 	
 } 
 }

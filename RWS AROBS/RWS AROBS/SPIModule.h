@@ -9,6 +9,6 @@
 #ifndef SPIMODULE_H_
 #define SPIMODULE_H_
 void SPIInit(void);
-uint8_t SPISendByte(uint8_t SPISentMessage);
+void SPISendByte(uint8_t SPISentMessage);
 uint8_t SPIRecieveByte(void);
 #endif /* SPIMODULE_H_ */
